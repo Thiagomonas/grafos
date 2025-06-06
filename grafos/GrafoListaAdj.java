@@ -40,13 +40,13 @@ public class GrafoListaAdj implements Grafo {
 
 	@Override
 	public int grau(int v) {
-		AtomicInteger grau = new AtomicInteger();
-		listaAdj.forEach((_, vSaida) ->  {
-			if (vSaida.contains(v)) {
-				grau.getAndIncrement();
+		int grau = 0;
+		for (Map.Entry<Integer, ArrayList<Integer>> par : listaAdj.entrySet()) {
+			if (par.getValue().contains(v)) {
+				grau++;
 			}
-		});
-		return grau.get();
+		}
+		return grau;
 	}
 
 	@Override
