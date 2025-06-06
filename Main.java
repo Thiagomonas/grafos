@@ -10,15 +10,17 @@ public class Main {
 		grafoM.addAresta(4, 1);
 		System.out.println(grafoM);
 
-		System.out.println(grafoM.grau(1) + "\n");
+		System.out.println(grafoM.grau(1));
+		System.out.println(grafoM.getNumArestas() + "\n");
 
 		GrafoListaAdj grafoL = new GrafoListaAdj();
 		grafoL.addAresta(1, 2);
 		grafoL.addAresta(2, 3);
 		grafoL.addAresta(4, 3);
-		grafoL.addAresta(2, 1);
+		grafoL.addAresta(1, 1);
 		System.out.println(grafoL);
 
 		System.out.println(grafoL.grau(1));
+		System.out.println(grafoL.getNumArestas() + "\n");
 	}
 }

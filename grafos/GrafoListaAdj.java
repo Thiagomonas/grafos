@@ -39,6 +39,39 @@ public class GrafoListaAdj implements Grafo {
 	}
 
 	@Override
+	public void removerAresta(int v1, int v2) {
+		ArrayList<Integer> vertices = listaAdj.get(v1);
+		if (vertices == null)
+			return;
+		vertices.remove(v2);
+		if (vertices.isEmpty())
+			listaAdj.remove(v1);
+		else
+			listaAdj.put(v1, vertices);
+
+		vertices = listaAdj.get(v2);
+		vertices.remove(v1);
+		if (vertices.isEmpty())
+			listaAdj.remove(v2);
+		else
+			listaAdj.put(v2, vertices);
+	}
+
+	@Override
+	public int getNumVertices() {
+		return listaAdj.size();
+	}
+
+	@Override
+	public int getNumArestas() {
+		int numArestas = 0;
+		for (Map.Entry<Integer, ArrayList<Integer>> par : listaAdj.entrySet()) {
+			numArestas += par.getValue().size();
+		}
+		return Math.ceilDiv(numArestas, 2);
+	}
+
+	@Override
 	public int grau(int v) {
 		int grau = 0;
 		for (Map.Entry<Integer, ArrayList<Integer>> par : listaAdj.entrySet()) {

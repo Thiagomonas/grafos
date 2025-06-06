@@ -19,6 +19,33 @@ public class GrafoMatriz implements Grafo {
 	}
 
 	@Override
+	public void removerAresta(int v1, int v2) {
+		if (v1 < 1 || v2 < 1 || v1 > numVertices || v2 > numVertices) {
+			throw new IndexOutOfBoundsException();
+		}
+		matriz[v1 - 1][v2 - 1] = 0;
+		matriz[v2 - 1][v1 - 1] = 0;
+	}
+
+	@Override
+	public int getNumVertices() {
+		return numVertices;
+	}
+
+	@Override
+	public int getNumArestas() {
+		int numArestas = 0;
+		for (int i = 0; i < numVertices; i++) {
+			for (int j = i; j < numVertices; j++) {
+				if (matriz[i][j] == 1) {
+					numArestas++;
+				}
+			}
+		}
+		return numArestas;
+	}
+
+	@Override
 	public int grau(int v) {
 		if (v < 1 || v > numVertices) {
 			throw new IndexOutOfBoundsException();
