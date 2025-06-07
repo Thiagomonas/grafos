@@ -1,79 +1,188 @@
 package grafos;
 
+import java.util.ArrayList;
+
 public class GrafoMatriz implements Grafo {
-	private int[][] matriz;
-	private int numVertices;
+	private ArrayList<ArrayList<Integer>> matriz;
+	private ArrayList<Integer> vertices;
+	private int numArestas;
 	
-	public GrafoMatriz(int numVertices) {
-		this.numVertices = numVertices;
-		matriz = new int[numVertices][numVertices];
+	public GrafoMatriz() {
+		matriz = new ArrayList<>();
+		vertices = new ArrayList<>();
+		numArestas = 0;
 	}
 
 	@Override
-	public void addAresta(int v1, int v2) {
-		if (v1 < 1 || v2 < 1 || v1 > numVertices || v2 > numVertices) {
-			throw new IndexOutOfBoundsException();
+	public int addVertice(int v) {
+//		Adiciona um vértice ao grafo caso ainda não exista
+//		Retorna 0 caso adicione
+//		Retorna 1 caso o vértice já exista
+		if (vertices.contains(v))
+			return 1;
+		vertices.add(v);
+		for (ArrayList<Integer> linha : matriz) {
+            linha.add(0);
+        }
+		ArrayList<Integer> linha = new ArrayList<>();
+		for (int i = 0; i < vertices.size(); i++) {
+			linha.add(0);
 		}
-		matriz[v1 - 1][v2 - 1] = 1;
-		matriz[v2 - 1][v1 - 1] = 1;
+		matriz.add(linha);
+		return 0;
 	}
 
 	@Override
-	public void removerAresta(int v1, int v2) {
-		if (v1 < 1 || v2 < 1 || v1 > numVertices || v2 > numVertices) {
-			throw new IndexOutOfBoundsException();
+	public int removerVertice(int v) {
+//		Remove o vertice do grafo caso exista
+//		Retorna 0 caso remova
+//		Retorna 1 caso o vértice não exista
+		int i = vertices.indexOf(v);
+		if (i == -1)
+			return 1;
+		vertices.remove(i);
+		for (ArrayList<Integer> linha : matriz) {
+			linha.remove(i);
 		}
-		matriz[v1 - 1][v2 - 1] = 0;
-		matriz[v2 - 1][v1 - 1] = 0;
+		matriz.remove(i);
+		return 0;
+	}
+
+	@Override
+	public int addAresta(int v1, int v2) {
+//		Adiciona uma aresta conectando dois vértices já existentes ao grafo
+//		Retorna 0 caso adicione a aresta
+//		Retorna 1 caso um dos vértices não exista
+		if (!vertices.contains(v1) || !vertices.contains(v2)) {
+			return 1;
+		}
+		int i = vertices.indexOf(v1);
+		int j = vertices.indexOf(v2);
+		matriz.get(i).add(j, 1);
+		matriz.get(j).add(i, 1);
+		numArestas++;
+		return 0;
+	}
+
+	@Override
+	public int removerAresta(int v1, int v2) {
+//		Remove uma aresta existente do grafo
+//		Retorna 0 caso remova
+//		Retorna 1 caso a aresta ou um dos vértices não exista
+		if (!vertices.contains(v1) || !vertices.contains(v2)) {
+			return 1;
+		}
+		int i = vertices.indexOf(v1);
+		int j = vertices.indexOf(v2);
+		if (i == -1 || j == -1) {
+			return 1;
+		}
+		matriz.get(i).remove(j);
+		matriz.get(j).remove(i);
+		numArestas--;
+		return 0;
 	}
 
 	@Override
 	public int getNumVertices() {
-		return numVertices;
+//		Conta o número de vértices existente no grafo
+		return vertices.size();
 	}
 
 	@Override
 	public int getNumArestas() {
-		int numArestas = 0;
-		for (int i = 0; i < numVertices; i++) {
-			for (int j = i; j < numVertices; j++) {
-				if (matriz[i][j] == 1) {
-					numArestas++;
-				}
-			}
-		}
+//		Conta o número de arestas presente no grafo
 		return numArestas;
 	}
 
 	@Override
 	public int grau(int v) {
-		if (v < 1 || v > numVertices) {
-			throw new IndexOutOfBoundsException();
+//		Conta o número de arestas incidentes no vertice v
+//		Retorna o grau caso o vertice exista
+//		Retorna -1 caso o vértice não exista
+		int j = vertices.indexOf(v);
+		if (j == -1) {
+			return -1;
 		}
 		int grau = 0;
-		for (int i = 0; i < numVertices; i++) {
-			if (matriz[i][v - 1] == 1) {
+		for (ArrayList<Integer> linha : matriz) {
+			if (linha.get(j) == 1)
 				grau++;
-			}
 		}
 		return grau;
+	}
+
+	public boolean ehCompleto() {
+//		Verifica se cada vertice presente possui aresta com cada outro vertice
+		for (ArrayList<Integer> linha : matriz) {
+			for (Integer v : linha) {
+				if (v == 0) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public int kRegular() {
+//		Calcula o grau de todos os vértices e verifica sua k-regularidade
+//		Retorna a k-regularidade se todos os vértices possuem o mesmo grau
+//		Retorna -1 caso não haja k-regularidade
+		int k = grau(vertices.getFirst());
+		for (Integer v : vertices) {
+			if (k != grau(v))
+				return -1;
+		}
+		return k;
+	}
+
+	public double densidade() {
+//        Calcula a densidade do grafo de acorda com a fórmula (2 * A) / V
+		return (double) (2 * getNumArestas()) / getNumVertices();
 	}
 	
 	@Override
 	public String toString() {
+//		Cria uma representação matricial do grafo
+		if (this.getNumVertices() == 0) {
+			return "Grafo Nulo\n";
+		}
 		StringBuilder res = new StringBuilder();
 		res.append("   ");
-		for (int i = 0; i < numVertices; i++) {
-			res.append(i + 1).append("  ");
+		for (Integer v : vertices) {
+			res.append(v).append("  ");
 		}
 		res.append("\n");
-		for (int i = 0; i < numVertices; i++) {
-			res.append(i + 1).append("  ");
-			for (int j = 0; j < numVertices; j++) {
-				res.append(matriz[i][j]).append("  ");
+		for (int i = 0; i < this.getNumVertices(); i++) {
+			res.append(vertices.get(i)).append("  ");
+			for (int j = 0; j < this.getNumVertices(); j++) {
+				res.append(matriz.get(i).get(j)).append("  ");
 			}
 			res.append("\n");
 		}
+		return res.toString();
+	}
+
+	@Override
+	public String representacaoFormal() {
+//		Cria uma representação com um conjunto de vértices e um conjunto de arestas
+		StringBuilder res = new StringBuilder();
+		res.append("V = {");
+		for (Integer v : vertices) {
+			res.append(v).append(", ");
+		}
+		res.delete(res.length() - 2, res.length());
+		res.append("}\n").append("A = {");
+		for (int i = 0; i < this.getNumVertices(); i++) {
+			for (int j = i; j < this.getNumVertices(); j++) {
+				if (matriz.get(i).get(j) == 1) {
+					res.append("(").append(vertices.get(i)).append(", ").append(vertices.get(j)).append(")");
+					res.append(", ");
+				}
+			}
+		}
+		res.delete(res.length() - 2, res.length());
+		res.append("}\n");
 		return res.toString();
 	}
 }
