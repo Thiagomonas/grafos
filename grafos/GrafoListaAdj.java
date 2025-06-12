@@ -126,6 +126,7 @@ public class GrafoListaAdj implements Grafo {
 
     @Override
     public boolean haCicloEuleriano() {
+//        Verifica se há um ciclo Euleriano caso todos os vértices possuam grau par
         for (Integer v : listaAdj.keySet()) {
             if (grau(v) % 2 != 0) {
                 return false;
@@ -136,6 +137,7 @@ public class GrafoListaAdj implements Grafo {
 
     @Override
     public boolean haPercursoEuleriano() {
+//        Verifica se há um percurso aberto ou fechado caso haja 2 ou 0 vértices de grau ímpar
         int contagemGrauImpar = 0;
         for (Integer v : listaAdj.keySet()) {
             if (grau(v) % 2 == 0) {
@@ -146,6 +148,7 @@ public class GrafoListaAdj implements Grafo {
     }
 
     protected void buscaEmProfundidade(int verticeInicial, ArrayList<Integer> verticesVisitados) {
+//        percorre todo o grafo sem repetir os vértices
         ArrayList<Integer> verticesAdjacentes = listaAdj.get(verticeInicial);
         for (Integer v : verticesAdjacentes) {
             if (!verticesVisitados.contains(v)) {
@@ -156,6 +159,7 @@ public class GrafoListaAdj implements Grafo {
     }
 
     protected int getNumComponentesConexos() {
+//        Conta o número de componentes conexos pela quantidade de vezes necessária de chamar a função buscaEmProfundiade
         int componentesConexos = 0;
         ArrayList<Integer> verticesVisitados = new ArrayList<>();
         for (Integer v : listaAdj.keySet()) {
@@ -169,6 +173,7 @@ public class GrafoListaAdj implements Grafo {
     }
 
     protected boolean ehPonte(int v1, int v2) {
+//        Verifica se a aresta é uma ponte caso o número de componentes conexos aumente com sua ausência
         int componentesConexosAntes = getNumComponentesConexos();
         removerAresta(v1, v2);
         int componentesConexosDepois = getNumComponentesConexos();
@@ -178,6 +183,7 @@ public class GrafoListaAdj implements Grafo {
 
     @Override
     public int[] getCicloEuleriano(int verticeInicial) {
+//        Utiliza do algoritmo de Fleury para descobrir um ciclo euleriano e o retorna
         if (!listaAdj.containsKey(verticeInicial) && !haCicloEuleriano())
             return null;
         HashMap<Integer, ArrayList<Integer>> listaAdjBackup = new HashMap<>(listaAdj);
