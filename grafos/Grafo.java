@@ -11,6 +11,9 @@ public interface Grafo {
 	boolean ehCompleto();
 	int kRegular();
 	double densidade();
+	boolean haCicloEuleriano();
+	boolean haPercursoEuleriano();
+	int[] getCicloEuleriano(int verticeInicial);
 	String toString();
 	String representacaoFormal();
 }

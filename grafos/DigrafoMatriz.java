@@ -1,11 +1,6 @@
 package grafos;
 
-import java.util.ArrayList;
-
 public class DigrafoMatriz extends GrafoMatriz{
-    ArrayList<ArrayList<Integer>> matriz;
-    ArrayList<Integer> vertices;
-    int numArestas;
 
     @Override
     public int addAresta(int v1, int v2) {

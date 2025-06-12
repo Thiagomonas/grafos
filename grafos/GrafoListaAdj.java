@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GrafoListaAdj implements Grafo {
-	private HashMap<Integer, ArrayList<Integer>> listaAdj;
-    private int numArestas;
+	protected HashMap<Integer, ArrayList<Integer>> listaAdj;
+    protected int numArestas;
 
 	public GrafoListaAdj() {
 		listaAdj = new HashMap<>();
@@ -124,7 +124,86 @@ public class GrafoListaAdj implements Grafo {
         return (double) (2 * getNumArestas()) / getNumVertices();
     }
 
-	@Override
+    @Override
+    public boolean haCicloEuleriano() {
+        for (Integer v : listaAdj.keySet()) {
+            if (grau(v) % 2 != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean haPercursoEuleriano() {
+        int contagemGrauImpar = 0;
+        for (Integer v : listaAdj.keySet()) {
+            if (grau(v) % 2 == 0) {
+                contagemGrauImpar++;
+            }
+        }
+        return contagemGrauImpar == 0 || contagemGrauImpar == 2;
+    }
+
+    protected void buscaEmProfundidade(int verticeInicial, ArrayList<Integer> verticesVisitados) {
+        ArrayList<Integer> verticesAdjacentes = listaAdj.get(verticeInicial);
+        for (Integer v : verticesAdjacentes) {
+            if (!verticesVisitados.contains(v)) {
+                verticesVisitados.add(v);
+                buscaEmProfundidade(v, verticesVisitados);
+            }
+        }
+    }
+
+    protected int getNumComponentesConexos() {
+        int componentesConexos = 0;
+        ArrayList<Integer> verticesVisitados = new ArrayList<>();
+        for (Integer v : listaAdj.keySet()) {
+            if (!verticesVisitados.contains(v)) {
+                verticesVisitados.add(v);
+                buscaEmProfundidade(v, verticesVisitados);
+                componentesConexos++;
+            }
+        }
+        return componentesConexos;
+    }
+
+    protected boolean ehPonte(int v1, int v2) {
+        int componentesConexosAntes = getNumComponentesConexos();
+        removerAresta(v1, v2);
+        int componentesConexosDepois = getNumComponentesConexos();
+        addAresta(v1, v2);
+        return componentesConexosDepois > componentesConexosAntes;
+    }
+
+    @Override
+    public int[] getCicloEuleriano(int verticeInicial) {
+        if (!listaAdj.containsKey(verticeInicial) && !haCicloEuleriano())
+            return null;
+        HashMap<Integer, ArrayList<Integer>> listaAdjBackup = new HashMap<>(listaAdj);
+        int[] cicloEuleriano = new int[getNumArestas() + 1];
+        cicloEuleriano[0] = verticeInicial;
+        int verticeAtual = verticeInicial;
+        int arestasPercorridas = 0;
+        int numArestasTotal = getNumArestas();
+        while (arestasPercorridas < numArestasTotal) {
+            ArrayList<Integer> verticesAdj = new ArrayList<>(listaAdj.get(verticeAtual));
+            int i = 0;
+            for (Integer v : verticesAdj) {
+                if (!ehPonte(verticeAtual, v) || verticesAdj.size() - i == 1) {
+                    cicloEuleriano[++arestasPercorridas] = v;
+                    removerAresta(verticeAtual, v);
+                    verticeAtual = v;
+                    break;
+                }
+                i++;
+            }
+        }
+        listaAdj = listaAdjBackup;
+        return cicloEuleriano;
+    }
+
+    @Override
 	public String toString() {
 		StringBuilder res = new StringBuilder();
 		for (HashMap.Entry<Integer, ArrayList<Integer>> par : listaAdj.entrySet()) {

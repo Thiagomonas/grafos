@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DigrafoListaAdj extends GrafoListaAdj {
-    private HashMap<Integer, ArrayList<Integer>> listaAdj;
-    private int numArestas;
 
     @Override
     public int addAresta(int v1, int v2) {
