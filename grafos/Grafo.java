@@ -1,5 +1,8 @@
 package grafos;
 
+import enums.Cor;
+import percurso.CaminhoDFS;
+
 public abstract class Grafo {
 	abstract int addVertice(int v);
 	abstract int removerVertice(int v);
@@ -131,5 +134,45 @@ public abstract class Grafo {
 			}
 		}
 		return cicloEuleriano;
+	}
+
+	private int getVerticeMax() {
+		int[] vertices = getVertices();
+		int max = 0;
+		for (int v: vertices) {
+			if (v > max)
+				max = v;
+		}
+		return max;
+	}
+
+	public CaminhoDFS DFS_Cormen() {
+//		Usando o algoritmo do DFS segundo o livo do Cormen
+//		Utiliza a classe CaminhoDFS para guardar as variáveis auxiliares
+		int[] vertices = getVertices();
+		int verticeMax = getVerticeMax() + 1;
+		CaminhoDFS caminhoDFS = new CaminhoDFS(verticeMax);
+		int tempo = 0;
+		for (int v: vertices) {
+			if (caminhoDFS.cores[v] == Cor.BRANCO) {
+				DFS(v, Integer.MIN_VALUE, caminhoDFS, tempo);
+			}
+		}
+		return caminhoDFS;
+	}
+
+	private int DFS(int v, int vIncidente, CaminhoDFS caminhoDFS, int tempo) {
+		caminhoDFS.vertices[v] = v;
+		caminhoDFS.cores[v] = Cor.CINZA;
+		caminhoDFS.pi[v] = vIncidente;
+		caminhoDFS.d[v] = tempo + 1;
+		for (Integer vAdj: getVerticesAdjacentes(v)) {
+			if (caminhoDFS.cores[vAdj] == Cor.BRANCO) {
+				tempo = DFS(vAdj, v, caminhoDFS, tempo + 1);
+			}
+		}
+		caminhoDFS.cores[v] = Cor.PRETO;
+		caminhoDFS.f[v] = tempo + 1;
+		return tempo;
 	}
 }

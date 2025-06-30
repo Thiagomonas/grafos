@@ -1,6 +1,7 @@
 import grafos.GrafoListaAdjValorado;
 import grafos.GrafoMatriz;
 import grafos.GrafoListaAdj;
+import percurso.CaminhoDFS;
 
 public class Main {
 	public static void main(String[] args) {
@@ -55,31 +56,34 @@ public class Main {
 //		}
 //		System.out.println("\n");
 //
-//		GrafoListaAdj grafoL = new GrafoListaAdj();
-//		for (int i = 0; i < 14; i++) {
-//			grafoL.addVertice(i + 1);
-//		}
-//		grafoL.addAresta(1, 2);
-//		grafoL.addAresta(1, 3);
-//		grafoL.addAresta(2, 4);
-//		grafoL.addAresta(3, 4);
-//		grafoL.addAresta(4, 5);
-//		grafoL.addAresta(4, 6);
-//		grafoL.addAresta(5, 6);
-//		grafoL.addAresta(5, 7);
-//		grafoL.addAresta(5, 8);
-//		grafoL.addAresta(6, 7);
-//		grafoL.addAresta(6, 9);
-//		grafoL.addAresta(7, 10);
-//		grafoL.addAresta(7, 11);
-//		grafoL.addAresta(8, 12);
-//		grafoL.addAresta(9, 10);
-//		grafoL.addAresta(11, 12);
-//		grafoL.addAresta(11, 13);
-//		grafoL.addAresta(11, 14);
-//		grafoL.addAresta(13, 14);
-//		System.out.println(grafoL);
-//		System.out.println(grafoL.representacaoFormal());
+		GrafoListaAdj grafoL = new GrafoListaAdj();
+		for (int i = 0; i < 14; i++) {
+			grafoL.addVertice(i + 1);
+		}
+		grafoL.addAresta(1, 2);
+		grafoL.addAresta(1, 3);
+		grafoL.addAresta(2, 4);
+		grafoL.addAresta(3, 4);
+		grafoL.addAresta(4, 5);
+		grafoL.addAresta(4, 6);
+		grafoL.addAresta(5, 6);
+		grafoL.addAresta(5, 7);
+		grafoL.addAresta(5, 8);
+		grafoL.addAresta(6, 7);
+		grafoL.addAresta(6, 9);
+		grafoL.addAresta(7, 10);
+		grafoL.addAresta(7, 11);
+		grafoL.addAresta(8, 12);
+		grafoL.addAresta(9, 10);
+		grafoL.addAresta(11, 12);
+		grafoL.addAresta(11, 13);
+		grafoL.addAresta(11, 14);
+		grafoL.addAresta(13, 14);
+		System.out.println(grafoL);
+		System.out.println(grafoL.representacaoFormal());
+
+		CaminhoDFS caminhoDFS = grafoL.DFS_Cormen();
+		System.out.println(caminhoDFS);
 
 //		int[] b = grafoL.getCicloEuleriano(13);
 //		for (int i = 0; i < a.length; i++) {
@@ -87,24 +91,24 @@ public class Main {
 //		}
 //		System.out.println("\n");
 
-		GrafoListaAdjValorado grafoLV = new GrafoListaAdjValorado();
-		grafoLV.addVertice(1);
-		grafoLV.addVertice(2);
-		grafoLV.addVertice(3);
-		grafoLV.addVertice(4);
-
-		grafoLV.addAresta(1, 2, 3);
-		grafoLV.addAresta(1, 3, 2);
-		grafoLV.addAresta(1, 4, 7);
-		grafoLV.addAresta(2, 3, 5);
-		grafoLV.addAresta(2, 4, 9);
-		grafoLV.addAresta(3, 4, 6);
-		System.out.println(grafoLV);
-
-		int[] c = grafoLV.getCicloHamiltoniano(1);
-		for (int i = 0; i < c.length; i++) {
-			System.out.print(c[i] + ", ");
-		}
-		System.out.println("\n");
+//		GrafoListaAdjValorado grafoLV = new GrafoListaAdjValorado();
+//		grafoLV.addVertice(1);
+//		grafoLV.addVertice(2);
+//		grafoLV.addVertice(3);
+//		grafoLV.addVertice(4);
+//
+//		grafoLV.addAresta(1, 2, 3);
+//		grafoLV.addAresta(1, 3, 2);
+//		grafoLV.addAresta(1, 4, 7);
+//		grafoLV.addAresta(2, 3, 5);
+//		grafoLV.addAresta(2, 4, 9);
+//		grafoLV.addAresta(3, 4, 6);
+//		System.out.println(grafoLV);
+//
+//		int[] c = grafoLV.getCicloHamiltoniano(1);
+//		for (int i = 0; i < c.length; i++) {
+//			System.out.print(c[i] + ", ");
+//		}
+//		System.out.println("\n");
 	}
 }
