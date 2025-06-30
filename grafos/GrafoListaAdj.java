@@ -3,7 +3,7 @@ package grafos;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class GrafoListaAdj implements Grafo {
+public class GrafoListaAdj extends Grafo {
 	protected HashMap<Integer, ArrayList<Integer>> listaAdj;
     protected int numArestas;
 
@@ -82,132 +82,40 @@ public class GrafoListaAdj implements Grafo {
 		return this.numArestas;
 	}
 
-	@Override
-	public int grau(int v) {
-//        Conta o número de arestas que partem de v (mesmo número que as incidentes)
-//        Retorna o grau caso o vértice exista
-//        Retorna -1 caso o vértice não exista
-        ArrayList<Integer> vAdj = listaAdj.get(v);
-        if (vAdj == null)
-            return -1;
-		return vAdj.size();
-	}
-
     @Override
-    public boolean ehCompleto() {
-//        Verifica se para cada vértice no grafo possui uma aresta com cada outra aresta do grafo
-        for (ArrayList<Integer> vAdj : listaAdj.values()) {
-            if (vAdj.size() < listaAdj.size())
-                return false;
-        }
-        return true;
+    public int[] getVertices() {
+        return listaAdj.keySet().stream().mapToInt(v -> v).toArray();
     }
 
     @Override
-    public int kRegular() {
-//		Calcula o grau de todos os vértices e verifica sua k-regularidade
-//		Retorna a k-regularidade se todos os vértices possuem o mesmo grau
-//		Retorna -1 caso não haja k-regularidade
-        int k = -1;
+    public int[] getVerticesAdjacentes(int v) {
+        return listaAdj.get(v).stream().mapToInt(vAdj -> vAdj).toArray();
+    }
+
+    @Override
+    public int[] getVerticesIncidentes(int v) {
+        ArrayList<Integer> res = new ArrayList<>();
+        for (HashMap.Entry<Integer, ArrayList<Integer>> par : listaAdj.entrySet()) {
+            if (par.getValue().contains(v))
+                res.add(par.getKey());
+        }
+        return res.stream().mapToInt(vAdj -> vAdj).toArray();
+    }
+
+    @Override
+    public Grafo getBackup() {
+        Grafo backup = new GrafoListaAdj();
         for (Integer v : listaAdj.keySet()) {
-            if (k == -1)
-                k = grau(v);
-            if (k != grau(v))
-                return -1;
+            backup.addVertice(v);
         }
-        return k;
-    }
-
-    @Override
-    public double densidade() {
-//        Calcula a densidade do grafo de acorda com a fórmula (2 * A) / V
-        return (double) (2 * getNumArestas()) / getNumVertices();
-    }
-
-    @Override
-    public boolean haCicloEuleriano() {
-//        Verifica se há um ciclo Euleriano caso todos os vértices possuam grau par
-        for (Integer v : listaAdj.keySet()) {
-            if (grau(v) % 2 != 0) {
-                return false;
+        for (HashMap.Entry<Integer, ArrayList<Integer>> par : listaAdj.entrySet()) {
+            for (Integer v : par.getValue()) {
+                backup.addAresta(par.getKey(), v);
             }
         }
-        return true;
+        return backup;
     }
 
-    @Override
-    public boolean haPercursoEuleriano() {
-//        Verifica se há um percurso aberto ou fechado caso haja 2 ou 0 vértices de grau ímpar
-        int contagemGrauImpar = 0;
-        for (Integer v : listaAdj.keySet()) {
-            if (grau(v) % 2 == 0) {
-                contagemGrauImpar++;
-            }
-        }
-        return contagemGrauImpar == 0 || contagemGrauImpar == 2;
-    }
-
-    protected void buscaEmProfundidade(int verticeInicial, ArrayList<Integer> verticesVisitados) {
-//        percorre todo o grafo sem repetir os vértices
-        ArrayList<Integer> verticesAdjacentes = listaAdj.get(verticeInicial);
-        for (Integer v : verticesAdjacentes) {
-            if (!verticesVisitados.contains(v)) {
-                verticesVisitados.add(v);
-                buscaEmProfundidade(v, verticesVisitados);
-            }
-        }
-    }
-
-    protected int getNumComponentesConexos() {
-//        Conta o número de componentes conexos pela quantidade de vezes necessária de chamar a função buscaEmProfundiade
-        int componentesConexos = 0;
-        ArrayList<Integer> verticesVisitados = new ArrayList<>();
-        for (Integer v : listaAdj.keySet()) {
-            if (!verticesVisitados.contains(v)) {
-                verticesVisitados.add(v);
-                buscaEmProfundidade(v, verticesVisitados);
-                componentesConexos++;
-            }
-        }
-        return componentesConexos;
-    }
-
-    protected boolean ehPonte(int v1, int v2) {
-//        Verifica se a aresta é uma ponte caso o número de componentes conexos aumente com sua ausência
-        int componentesConexosAntes = getNumComponentesConexos();
-        removerAresta(v1, v2);
-        int componentesConexosDepois = getNumComponentesConexos();
-        addAresta(v1, v2);
-        return componentesConexosDepois > componentesConexosAntes;
-    }
-
-    @Override
-    public int[] getCicloEuleriano(int verticeInicial) {
-//        Utiliza do algoritmo de Fleury para descobrir um ciclo euleriano e o retorna
-        if (!listaAdj.containsKey(verticeInicial) && !haCicloEuleriano())
-            return null;
-        HashMap<Integer, ArrayList<Integer>> listaAdjBackup = new HashMap<>(listaAdj);
-        int[] cicloEuleriano = new int[getNumArestas() + 1];
-        cicloEuleriano[0] = verticeInicial;
-        int verticeAtual = verticeInicial;
-        int arestasPercorridas = 0;
-        int numArestasTotal = getNumArestas();
-        while (arestasPercorridas < numArestasTotal) {
-            ArrayList<Integer> verticesAdj = new ArrayList<>(listaAdj.get(verticeAtual));
-            int i = 0;
-            for (Integer v : verticesAdj) {
-                if (!ehPonte(verticeAtual, v) || verticesAdj.size() - i == 1) {
-                    cicloEuleriano[++arestasPercorridas] = v;
-                    removerAresta(verticeAtual, v);
-                    verticeAtual = v;
-                    break;
-                }
-                i++;
-            }
-        }
-        listaAdj = listaAdjBackup;
-        return cicloEuleriano;
-    }
 
     @Override
 	public String toString() {

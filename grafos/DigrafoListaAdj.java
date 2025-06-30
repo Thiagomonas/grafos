@@ -1,7 +1,6 @@
 package grafos;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DigrafoListaAdj extends GrafoListaAdj {
 
@@ -32,18 +31,5 @@ public class DigrafoListaAdj extends GrafoListaAdj {
         listaAdj.put(v1, v1Adj);
         numArestas--;
         return 0;
-    }
-
-    @Override
-    public int grau(int v) {
-//        Conta o número de arestas incidentes no vertice v
-//        Retorna o grau caso o vértice exista
-//        Retorna -1 caso o vértice não exista
-        int grau = 0;
-        for (ArrayList<Integer> vAdj : listaAdj.values()) {
-            if (vAdj.contains(v))
-                grau++;
-        }
-        return grau;
     }
 }
