@@ -1,6 +1,7 @@
 package grafos;
 
 import enums.Cor;
+import percurso.CaminhoBFS;
 import percurso.CaminhoDFS;
 
 public abstract class Grafo {
@@ -202,5 +203,31 @@ public abstract class Grafo {
 				DFSc(vAdj, v, caminhoDFS, vInicial);
 			}
 		}
+	}
+
+	public CaminhoBFS BFS_Cormen(int verticeInicial) {
+//		Busca BFS implementada segundo o algoritmo de Cormen
+//		Foi utilizada a classe CaminhoBFS para guardar os vetores auxiliares
+		int[] fila = new int[getNumVertices()];
+		int tamFila = 0;
+		int verticeMax = getVerticeMax() + 1;
+		CaminhoBFS caminhoBFS = new CaminhoBFS(verticeMax);
+		caminhoBFS.cores[verticeInicial] = Cor.CINZA;
+		caminhoBFS.d[verticeInicial] = 0;
+		caminhoBFS.pi[verticeInicial] = Integer.MIN_VALUE;
+		fila[tamFila++] = verticeInicial;
+		while (tamFila > 0) {
+			int vAtual = fila[--tamFila];
+			for (Integer vAdj: getVerticesAdjacentes(vAtual)) {
+				if (caminhoBFS.cores[vAdj] == Cor.BRANCO) {
+					caminhoBFS.cores[vAdj] = Cor.CINZA;
+					caminhoBFS.pi[vAdj] = vAtual;
+					caminhoBFS.d[vAdj] = caminhoBFS.d[vAtual] + 1;
+					fila[tamFila++] = vAdj;
+				}
+			}
+			caminhoBFS.cores[vAtual] = Cor.PRETO;
+		}
+		return caminhoBFS;
 	}
 }

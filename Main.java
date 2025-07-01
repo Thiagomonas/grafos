@@ -1,6 +1,7 @@
 import grafos.GrafoListaAdjValorado;
 import grafos.GrafoMatriz;
 import grafos.GrafoListaAdj;
+import percurso.CaminhoBFS;
 import percurso.CaminhoDFS;
 
 public class Main {
@@ -105,5 +106,9 @@ public class Main {
 			System.out.print(ciclo[i] + " -> ");
 		}
 		System.out.println(ciclo[ciclo.length - 1]);
+
+		System.out.println("Teste caminho BFS:");
+		CaminhoBFS caminhoBFS = grafoL.BFS_Cormen(2);
+		System.out.println(caminhoBFS);
 	}
 }
