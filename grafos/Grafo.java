@@ -230,4 +230,31 @@ public abstract class Grafo {
 		}
 		return caminhoBFS;
 	}
+
+	public int BFS_dist(int verticeInicial, int verticeFinal) {
+//		Modificado o algoritmo BFS para retornar a distância entre dois vértices
+		int[] fila = new int[getNumVertices()];
+		int tamFila = 0;
+		int verticeMax = getVerticeMax() + 1;
+		CaminhoBFS caminhoBFS = new CaminhoBFS(verticeMax);
+		caminhoBFS.cores[verticeInicial] = Cor.CINZA;
+		caminhoBFS.d[verticeInicial] = 0;
+		fila[tamFila++] = verticeInicial;
+		while (tamFila > 0) {
+			int vAtual = fila[--tamFila];
+			for (Integer vAdj: getVerticesAdjacentes(vAtual)) {
+				if (caminhoBFS.cores[vAdj] == Cor.BRANCO) {
+					caminhoBFS.cores[vAdj] = Cor.CINZA;
+					caminhoBFS.d[vAdj] = caminhoBFS.d[vAtual] + 1;
+					fila[tamFila++] = vAdj;
+				}
+				if (vAdj == verticeFinal) {
+					return caminhoBFS.d[vAdj];
+				}
+			}
+			caminhoBFS.cores[vAtual] = Cor.PRETO;
+		}
+		// Não há caminho entre os dois vértices
+		return Integer.MAX_VALUE;
+	}
 }

@@ -105,10 +105,15 @@ public class Main {
 		for (int i = 0; i < ciclo.length - 1; i++) {
 			System.out.print(ciclo[i] + " -> ");
 		}
-		System.out.println(ciclo[ciclo.length - 1]);
+		System.out.println(ciclo[ciclo.length - 1] + "\n");
 
 		System.out.println("Teste caminho BFS:");
 		CaminhoBFS caminhoBFS = grafoL.BFS_Cormen(2);
 		System.out.println(caminhoBFS);
+
+		System.out.println("Teste distância entre dois vértice com BFS:");
+		int v1 = 2, v2 = 7;
+		int dist = grafoL.BFS_dist(v1, v2);
+		System.out.println("Distância entre " + v1 + " e " + v2 + " = " + dist);
 	}
 }
