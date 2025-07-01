@@ -5,57 +5,41 @@ import percurso.CaminhoDFS;
 
 public class Main {
 	public static void main(String[] args) {
-//		GrafoMatriz grafoM = new GrafoMatriz();
-//		for (int i = 0; i < 14; i++) {
-//			grafoM.addVertice(i + 1);
-//		}
-//		grafoM.addAresta(1, 2);
-//		grafoM.addAresta(1, 3);
-//		grafoM.addAresta(2, 4);
-//		grafoM.addAresta(3, 4);
-//		grafoM.addAresta(4, 5);
-//		grafoM.addAresta(4, 6);
-//		grafoM.addAresta(5, 6);
-//		grafoM.addAresta(5, 7);
-//		grafoM.addAresta(5, 8);
-//		grafoM.addAresta(6, 7);
-//		grafoM.addAresta(6, 9);
-//		grafoM.addAresta(7, 10);
-//		grafoM.addAresta(7, 11);
-//		grafoM.addAresta(8, 12);
-//		grafoM.addAresta(9, 10);
-//		grafoM.addAresta(11, 12);
-//		grafoM.addAresta(11, 13);
-//		grafoM.addAresta(11, 14);
-//		grafoM.addAresta(13, 14);
-//
-//		grafoM.addAresta(1, 2);
-//		grafoM.addAresta(1, 3);
-//		grafoM.addAresta(1, 4);
-//		grafoM.addAresta(1, 8);
-//		grafoM.addAresta(2, 3);
-//		grafoM.addAresta(2, 5);
-//		grafoM.addAresta(2, 7);
-//		grafoM.addAresta(3, 5);
-//		grafoM.addAresta(3, 6);
-//		grafoM.addAresta(4, 6);
-//		grafoM.addAresta(5, 6);
-//		grafoM.addAresta(5, 7);
-//		grafoM.addAresta(6, 8);
-//		grafoM.addAresta(7, 8);
-//		grafoM.addAresta(7, 10);
-//		grafoM.addAresta(8, 9);
-//		grafoM.addAresta(9, 10);
-//
-//		System.out.println(grafoM);
-//		System.out.println(grafoM.representacaoFormal());
-//
-//		int[] a = grafoM.getCicloEuleriano(1);
-//		for (int i = 0; i < a.length; i++) {
-//			System.out.print(a[i] + ", ");
-//		}
-//		System.out.println("\n");
-//
+		System.out.println("Teste Grafo Matriz:");
+		GrafoMatriz grafoM = new GrafoMatriz();
+		for (int i = 0; i < 14; i++) {
+			grafoM.addVertice(i + 1);
+		}
+		grafoM.addAresta(1, 2);
+		grafoM.addAresta(1, 3);
+		grafoM.addAresta(2, 4);
+		grafoM.addAresta(3, 4);
+		grafoM.addAresta(4, 5);
+		grafoM.addAresta(4, 6);
+		grafoM.addAresta(5, 6);
+		grafoM.addAresta(5, 7);
+		grafoM.addAresta(5, 8);
+		grafoM.addAresta(6, 7);
+		grafoM.addAresta(6, 9);
+		grafoM.addAresta(7, 10);
+		grafoM.addAresta(7, 11);
+		grafoM.addAresta(8, 12);
+		grafoM.addAresta(9, 10);
+		grafoM.addAresta(11, 12);
+		grafoM.addAresta(11, 13);
+		grafoM.addAresta(11, 14);
+		grafoM.addAresta(13, 14);
+
+		System.out.println(grafoM);
+		System.out.println(grafoM.representacaoFormal());
+
+		int[] a = grafoM.getCicloEuleriano(1);
+		for (int i = 0; i < a.length; i++) {
+			System.out.print(a[i] + ", ");
+		}
+		System.out.println("\n");
+
+		System.out.println("Teste Grafo Lista de Adjacência:");
 		GrafoListaAdj grafoL = new GrafoListaAdj();
 		for (int i = 0; i < 14; i++) {
 			grafoL.addVertice(i + 1);
@@ -82,33 +66,44 @@ public class Main {
 		System.out.println(grafoL);
 		System.out.println(grafoL.representacaoFormal());
 
+		System.out.println("Teste Ciclo Eulerino:");
+		int[] b = grafoL.getCicloEuleriano(13);
+		for (int i = 0; i < a.length; i++) {
+			System.out.print(b[i] + ", ");
+		}
+		System.out.println("\n");
+
+		System.out.println("Teste Grafo Valorado:");
+		GrafoListaAdjValorado grafoLV = new GrafoListaAdjValorado();
+		grafoLV.addVertice(1);
+		grafoLV.addVertice(2);
+		grafoLV.addVertice(3);
+		grafoLV.addVertice(4);
+
+		grafoLV.addAresta(1, 2, 3);
+		grafoLV.addAresta(1, 3, 2);
+		grafoLV.addAresta(1, 4, 7);
+		grafoLV.addAresta(2, 3, 5);
+		grafoLV.addAresta(2, 4, 9);
+		grafoLV.addAresta(3, 4, 6);
+		System.out.println(grafoLV);
+
+		System.out.println("Teste Ciclo Hamiltoniano:");
+		int[] c = grafoLV.getCicloHamiltoniano(1);
+		for (int i = 0; i < c.length; i++) {
+			System.out.print(c[i] + ", ");
+		}
+		System.out.println("\n");
+
+		System.out.println("teste caminho DFS:");
 		CaminhoDFS caminhoDFS = grafoL.DFS_Cormen();
 		System.out.println(caminhoDFS);
 
-//		int[] b = grafoL.getCicloEuleriano(13);
-//		for (int i = 0; i < a.length; i++) {
-//			System.out.print(b[i] + ", ");
-//		}
-//		System.out.println("\n");
-
-//		GrafoListaAdjValorado grafoLV = new GrafoListaAdjValorado();
-//		grafoLV.addVertice(1);
-//		grafoLV.addVertice(2);
-//		grafoLV.addVertice(3);
-//		grafoLV.addVertice(4);
-//
-//		grafoLV.addAresta(1, 2, 3);
-//		grafoLV.addAresta(1, 3, 2);
-//		grafoLV.addAresta(1, 4, 7);
-//		grafoLV.addAresta(2, 3, 5);
-//		grafoLV.addAresta(2, 4, 9);
-//		grafoLV.addAresta(3, 4, 6);
-//		System.out.println(grafoLV);
-//
-//		int[] c = grafoLV.getCicloHamiltoniano(1);
-//		for (int i = 0; i < c.length; i++) {
-//			System.out.print(c[i] + ", ");
-//		}
-//		System.out.println("\n");
+		System.out.println("Teste ciclo por DFS:");
+		int[] ciclo = grafoL.DFS_Ciclo(5);
+		for (int i = 0; i < ciclo.length - 1; i++) {
+			System.out.print(ciclo[i] + " -> ");
+		}
+		System.out.println(ciclo[ciclo.length - 1]);
 	}
 }

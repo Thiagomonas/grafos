@@ -162,7 +162,6 @@ public abstract class Grafo {
 	}
 
 	private int DFS(int v, int vIncidente, CaminhoDFS caminhoDFS, int tempo) {
-		caminhoDFS.vertices[v] = v;
 		caminhoDFS.cores[v] = Cor.CINZA;
 		caminhoDFS.pi[v] = vIncidente;
 		caminhoDFS.d[v] = tempo + 1;
@@ -174,5 +173,34 @@ public abstract class Grafo {
 		caminhoDFS.cores[v] = Cor.PRETO;
 		caminhoDFS.f[v] = tempo + 1;
 		return tempo;
+	}
+
+	public int[] DFS_Ciclo(int verticeInicial) {
+//		Adaptação do algoritmo DFS do Cormen para encontrar um ciclo no grafo
+		int verticeMax = getVerticeMax() + 1;
+		CaminhoDFS caminhoDFS = new CaminhoDFS(verticeMax);
+		DFSc(verticeInicial, Integer.MIN_VALUE, caminhoDFS, verticeInicial);
+		int[] caminhoIncompleto = caminhoDFS.getCaminho(verticeInicial);
+		int[] caminho = new int[caminhoIncompleto.length + 1];
+		for (int i = 0; i < caminhoIncompleto.length; i++) {
+			caminho[i] = caminhoIncompleto[i];
+		}
+		caminho[caminhoIncompleto.length] = verticeInicial;
+		return caminho;
+	}
+
+	private void DFSc(int v, int vIncidente, CaminhoDFS caminhoDFS, int vInicial) {
+		caminhoDFS.cores[v] = Cor.CINZA;
+		caminhoDFS.pi[v] = vIncidente;
+		int[] vAdjacentes = getVerticesAdjacentes(v);
+		// Encontrou um ciclo
+		if (contem(vAdjacentes, vInicial)) {
+			return;
+		}
+		for (Integer vAdj: vAdjacentes) {
+			if (caminhoDFS.cores[vAdj] == Cor.BRANCO) {
+				DFSc(vAdj, v, caminhoDFS, vInicial);
+			}
+		}
 	}
 }

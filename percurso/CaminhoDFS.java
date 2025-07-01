@@ -2,17 +2,16 @@ package percurso;
 
 import enums.Cor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class CaminhoDFS {
-    public int[] vertices;
     public Cor[] cores;
     public int[] pi;
     public int[] d;
     public int[] f;
 
     public CaminhoDFS(int tam) {
-        vertices = new int[tam];
         cores = initCores(tam);
         pi = new int[tam];
         d = new int[tam];
@@ -23,6 +22,23 @@ public class CaminhoDFS {
         Cor[] cores = new Cor[tam];
         Arrays.fill(cores, Cor.BRANCO);
         return cores;
+    }
+
+    public int[] getCaminho(int verticeInicial) {
+        ArrayList<Integer> caminho = new ArrayList<>();
+        caminho.add(verticeInicial);
+        int verticeAtual = verticeInicial;
+        while (true) {
+            for (int i = 0; i < pi.length; i++) {
+                if (pi[i] == verticeAtual) {
+                    verticeAtual = i;
+                    caminho.add(verticeAtual);
+                    break;
+                }
+            }
+            break;
+        }
+        return caminho.stream().mapToInt(i -> i).toArray();
     }
 
     @Override
