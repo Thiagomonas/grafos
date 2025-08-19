@@ -1,9 +1,8 @@
 package grafos;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
-public class GrafoListaAdjValorado implements GrafoValorado {
+public class GrafoListaAdjValorado extends GrafoValorado {
     protected HashMap<Integer, HashMap<Integer, Integer>> listaAdj;
     protected int numArestas;
 
@@ -77,42 +76,26 @@ public class GrafoListaAdjValorado implements GrafoValorado {
         return listaAdj.get(v1).get(v2);
     }
 
-    protected int getVerticeAdjCustoMin(int v, int[] verticesMarcados) {
-        int verticeMin = Integer.MAX_VALUE;
-        int valorMin = Integer.MAX_VALUE;
-        for (HashMap.Entry<Integer, Integer> par : listaAdj.get(v).entrySet()) {
-            if (valorMin > par.getValue() && Arrays.stream(verticesMarcados).allMatch((vertice) -> vertice != par.getKey())) {
-                valorMin = par.getValue();
-                verticeMin = par.getKey();
-            }
+    @Override
+    public int[] getVertices() {
+        int[] vertices = new int[getNumVertices()];
+        int i = 0;
+        for (int v: listaAdj.keySet()) {
+            vertices[i] = v;
+            i++;
         }
-        return verticeMin;
+        return vertices;
     }
 
     @Override
-    public int[] getCicloHamiltoniano(int verticeInicial) {
-//        Retorna um ciclo hamiltoniano, possivelmente de custo mínimo, usando o algoritmo de Bellmore e Nemhauser
-        if (!listaAdj.containsKey(verticeInicial))
-            return null;
-
-        int[] cicloHamiltoniano = new int[getNumVertices() + 1];
-        cicloHamiltoniano[0] = verticeInicial;
-        int verticeAtual = verticeInicial;
-        int numVerticesVisitados = 1;
-        while (numVerticesVisitados < getNumVertices()) {
-            int v = getVerticeAdjCustoMin(verticeAtual, cicloHamiltoniano);
-            if (v == Integer.MAX_VALUE) {
-                // Não há outro vértice para ir
-                break;
-            }
-            verticeAtual = v;
-            cicloHamiltoniano[numVerticesVisitados++] = v;
+    public int[] getVerticesAdjacentes(int v) {
+        int[] verticesAdj = new int[listaAdj.get(v).size()];
+        int i = 0;
+        for (int vAdj : listaAdj.get(v).keySet()) {
+            verticesAdj[i] = vAdj;
+            i++;
         }
-        if (!listaAdj.get(verticeAtual).containsKey(verticeInicial) || numVerticesVisitados < getNumVertices())
-            // Não há ciclo hamiltoniano
-            return null;
-        cicloHamiltoniano[numVerticesVisitados] = verticeInicial;
-        return cicloHamiltoniano;
+        return verticesAdj;
     }
 
     @Override

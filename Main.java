@@ -1,8 +1,7 @@
-import grafos.GrafoListaAdjValorado;
-import grafos.GrafoMatriz;
-import grafos.GrafoListaAdj;
+import grafos.*;
 import percurso.CaminhoBFS;
 import percurso.CaminhoDFS;
+import percurso.PercursoMinimo;
 
 public class Main {
 	public static void main(String[] args) {
@@ -114,6 +113,28 @@ public class Main {
 		System.out.println("Teste distância entre dois vértice com BFS:");
 		int v1 = 2, v2 = 7;
 		int dist = grafoL.BFS_dist(v1, v2);
-		System.out.println("Distância entre " + v1 + " e " + v2 + " = " + dist);
+		System.out.println("Distância entre " + v1 + " e " + v2 + " = " + dist + "\n");
+
+		System.out.println("Digrafo Valorado:");
+		GrafoValorado grafoV = new DigrafoListaAdjValorado();
+		grafoV.addVertice(1);
+		grafoV.addVertice(2);
+		grafoV.addVertice(3);
+		grafoV.addVertice(4);
+
+		grafoV.addAresta(1, 2, 3);
+		grafoV.addAresta(1, 3, 2);
+		grafoV.addAresta(1, 4, 7);
+		grafoV.addAresta(2, 3, 5);
+		grafoV.addAresta(2, 4, 9);
+		grafoV.addAresta(3, 4, 6);
+		System.out.println(grafoV);
+
+		System.out.println("Distâncias com algoritmo Bellman-Ford:");
+		PercursoMinimo percursoMinimo = grafoV.bellmanFord(1);
+		for (int i = 1; i < percursoMinimo.distancias.length; i++) {
+			System.out.print("d[" + i + "] = " + percursoMinimo.distancias[i] + " ");
+			System.out.println("pi[" + i + "] = " + percursoMinimo.pi[i] + " ");
+		}
 	}
 }
