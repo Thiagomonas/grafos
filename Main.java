@@ -136,5 +136,16 @@ public class Main {
 			System.out.print("d[" + i + "] = " + percursoMinimo.distancias[i] + " ");
 			System.out.println("pi[" + i + "] = " + percursoMinimo.pi[i] + " ");
 		}
+
+		System.out.println("\nAlgoritmo Floyd-Marshall:");
+		percursoMinimo = grafoV.floydWarshall();
+		for (int i = 1; i < percursoMinimo.matrizDist.length; i++) {
+			System.out.print("[ ");
+			for (int j = 1; j < percursoMinimo.matrizDist[i].length; j++) {
+				System.out.print(percursoMinimo.matrizDist[i][j] + " ");
+			}
+			System.out.print("] ");
+			System.out.println("pi[" + i + "] = " + percursoMinimo.pi[i] + " ");
+		}
 	}
 }

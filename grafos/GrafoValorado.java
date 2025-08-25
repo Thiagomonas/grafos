@@ -89,4 +89,34 @@ public abstract class GrafoValorado {
         }
         return percursoMinimo;
     }
+
+    public PercursoMinimo floydWarshall() {
+        PercursoMinimo percursoMinimo = new PercursoMinimo(getVertices());
+        int numVertices = getNumVertices();
+        int[] vertices = getVertices();
+        for (int v: vertices) {
+            for (int w: vertices) {
+                if (v == w) {
+                    percursoMinimo.matrizDist[v][w] = 0;
+                }
+                else {
+                    percursoMinimo.matrizDist[v][w] = getValorAresta(v, w);
+                    percursoMinimo.pi[w] = v;
+                }
+            }
+        }
+        for (int k : vertices) {
+            for (int v: vertices) {
+                for (int w: vertices) {
+                    if (percursoMinimo.matrizDist[v][k] == Integer.MAX_VALUE || percursoMinimo.matrizDist[k][w] == Integer.MAX_VALUE || percursoMinimo.matrizDist[v][w] == Integer.MAX_VALUE)
+                        continue;
+                    if (percursoMinimo.matrizDist[v][k] + percursoMinimo.matrizDist[k][w] < percursoMinimo.matrizDist[v][w]) {
+                        percursoMinimo.matrizDist[v][w] = percursoMinimo.matrizDist[v][k] + percursoMinimo.matrizDist[k][w];
+                        percursoMinimo.pi[w] = k;
+                    }
+                }
+            }
+        }
+        return percursoMinimo;
+    }
 }

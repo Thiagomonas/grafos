@@ -73,6 +73,8 @@ public class GrafoListaAdjValorado extends GrafoValorado {
 
     @Override
     public int getValorAresta(int v1, int v2) {
+        if (!listaAdj.containsKey(v1) || !listaAdj.containsKey(v2) || !listaAdj.get(v1).containsKey(v2))
+            return Integer.MAX_VALUE;
         return listaAdj.get(v1).get(v2);
     }
 
